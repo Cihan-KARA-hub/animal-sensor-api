@@ -1,0 +1,42 @@
+spring:
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${EMAIL_USERNAME}
+    password: ${EMAIL_KEY}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+        transport:
+          protocol: smtp
+  liquibase:
+    change-log: classpath:db/changelog/master.yml
+    default-schema: public
+  sql:
+    init:
+      platform: postgres
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/cattle_health
+    username: admin
+    password: admin123
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+
+  application:
+    name: cloud-server
+
+server:
+  port: 8081
+
+
+logging:
+  level:
+    org.hibernate.SQL: DEBUG  # Hibernate SQL sorgular?n? loglar
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE  # SQL parametrelerini loglar
+

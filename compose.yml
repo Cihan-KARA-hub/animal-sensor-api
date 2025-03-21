@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16.2
+    container_name: postgres_db
+    restart: always
+    environment:
+      POSTGRES_DB: cattle_health
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin123
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - postgres_network
+
+volumes:
+  postgres_data:
+
+networks:
+  postgres_network:
+    driver: bridge

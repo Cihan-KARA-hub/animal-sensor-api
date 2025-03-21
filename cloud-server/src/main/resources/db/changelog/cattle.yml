@@ -1,0 +1,209 @@
+databaseChangeLog:
+  - changeSet:
+      id: 4
+      author: cihan
+      changes:
+        - createTable:
+            tableName: animal
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: tag_id
+                  type: VARCHAR(50)
+                  constraints:
+                    unique: true
+                    nullable: false
+              - column:
+                  name: company_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_company
+                    references: company(id)
+                    onDelete: CASCADE
+              - column:
+                  name: species
+                  type: VARCHAR(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: birth_date
+                  type: DATE
+              - column:
+                  name: created_at
+                  type: TIMESTAMP
+                  defaultValueComputed: CURRENT_TIMESTAMP
+              - column:
+                  name: updated_at
+                  type: TIMESTAMP
+                  defaultValueComputed: CURRENT_TIMESTAMP
+
+        - createTable:
+            tableName: chewing_activity
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: animal_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_chewing_animal
+                    references: animal(id)
+                    onDelete: CASCADE
+              - column:
+                  name: chew_count
+                  type: INT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: recorded_at
+                  type: TIMESTAMP
+                  defaultValueComputed: CURRENT_TIMESTAMP
+
+        - createTable:
+            tableName: temperature_humidity
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: animal_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_temp_animal
+                    references: animal(id)
+                    onDelete: CASCADE
+              - column:
+                  name: temperature
+                  type: DECIMAL(5,2)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: humidity
+                  type: DECIMAL(5,2)
+              - column:
+                  name: recorded_at
+                  type: TIMESTAMP
+                  defaultValueComputed: CURRENT_TIMESTAMP
+
+        - createTable:
+            tableName: heart_beat
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: animal_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_respiration_animal
+                    references: animal(id)
+                    onDelete: CASCADE
+              - column:
+                  name: heart_beat_rate
+                  type: INT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: recorded_at
+                  type: TIMESTAMP
+                  defaultValueComputed: CURRENT_TIMESTAMP
+
+        - createTable:
+            tableName: alerts
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: animal_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_alert_animal
+                    references: animal(id)
+                    onDelete: CASCADE
+              - column:
+                  name: alert_type
+                  type: VARCHAR(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: alert_message
+                  type: TEXT
+              - column:
+                  name: created_at
+                  type: TIMESTAMP
+                  defaultValueComputed: CURRENT_TIMESTAMP
+        - createTable:
+            tableName: medical_history
+            columns:
+               - column:
+                   name: id
+                   type: BIGINT
+                   autoIncrement: true
+
+                   constraints:
+                     primaryKey: true
+                     nullable: false
+               - column:
+                   name: animal_id
+                   type: BIGINT
+                   constraints:
+                     nullable: false
+                     foreignKeyName: fk_medical_animal
+                     references: animal(id)
+                     onDelete: CASCADE
+               - column:
+                   name: disease_name
+                   type: VARCHAR(100)
+                   constraints:
+                     nullable: false
+               - column:
+                   name: diagnosis_date
+                   type: DATE
+                   constraints:
+                     nullable: false
+               - column:
+                   name: recovery_date
+                   type: DATE
+               - column:
+                   name: treatment
+                   type: TEXT
+               - column:
+                   name: veterinarian
+                   type: VARCHAR(100)
+               - column:
+                   name: created_at
+                   type: TIMESTAMP
+                   defaultValueComputed: CURRENT_TIMESTAMP

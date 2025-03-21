@@ -1,0 +1,10 @@
+databaseChangeLog:
+
+  - include:
+      file: db/changelog/users.yml
+  - include:
+      file: db/changelog/company.yml
+  - include:
+      file: db/changelog/vet.yml
+  - include:
+      file: db/changelog/cattle.yml
