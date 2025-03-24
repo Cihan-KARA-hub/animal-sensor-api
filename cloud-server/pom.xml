@@ -32,6 +32,16 @@
                 <groupId>org.liquibase</groupId>
                 <artifactId>liquibase-core</artifactId>
             </dependency>
+        <!-- fuzzy logic-->
+        <!-- https://mvnrepository.com/artifact/net.sourceforge.jFuzzyLogic/jFuzzyLogic -->
+        <dependency>
+            <groupId>net.sourceforge.jFuzzyLogic</groupId>
+            <artifactId>jFuzzyLogic</artifactId>
+            <version>1.2</version>
+            <scope>system</scope>
+            <systemPath>C:/Users/cihan/OneDrive/Masaüstü/monitoring-cattle-health/cloud-server/src/main/resources/lib/jFuzzyLogic.jar</systemPath>
+
+        </dependency>
     <dependency>
         <groupId>org.postgresql</groupId>
         <artifactId>postgresql</artifactId>
