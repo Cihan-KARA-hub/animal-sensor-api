@@ -12,7 +12,7 @@ public class EmailScheduler {
     private JdbcTemplate jdbcTemplate;
     private EmailService emailService;
 
-    @Scheduled(fixedRate = 30000)
+    //@Scheduled(fixedRate = 30000)
     private void checkDatabaseAndSendEmail() {
         String sql = "SELECT email, message FROM notifications WHERE status = 'PENDING'";
         List<Map<String, Object>> list = jdbcTemplate.queryForList(sql);
@@ -20,7 +20,6 @@ public class EmailScheduler {
             String email = (String) row.get("email");
             String message = (String) row.get("message");
 
-            // E-posta gönder
             emailService.sendEmail(email, "Bildirim", message);
 
             // Gönderilen mesajı güncelle (örneğin, status = 'SENT' yap)

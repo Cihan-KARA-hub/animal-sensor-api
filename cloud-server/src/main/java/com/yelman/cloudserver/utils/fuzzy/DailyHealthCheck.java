@@ -2,34 +2,33 @@ package com.yelman.cloudserver.utils.fuzzy;
 
 import net.sourceforge.jFuzzyLogic.FIS;
 
-public class FuzzyLogic {
-    
-    public  static void logic(){
+public class DailyHealthCheck {
+
+    public static Double fuzzyLogicGeneral(double temp, int heart, int rumination, int humidity) {
         try {
-            String file = "C:/Users/cihan/OneDrive/Masaüstü/monitoring-cattle-health/cloud-server/src/main/java/com/yelman/cloudserver/utils/fuzzy/cattle_health.fcl";
+            String file = "C:/Users/cihan/OneDrive/Masaüstü/monitoring-cattle-health/cloud-server/src/main/java/com/yelman/cloudserver/utils/fuzzy/daily_health_check.fcl";
             if (file == null) {
                 System.err.println("FCL dosyası kaynaklarda bulunamadı!");
-                return;
+                return null;
             }
-
             FIS fis = FIS.load(file, true);
             if (fis == null) {
                 System.err.println("FCL dosyası yüklenemedi!");
-                return;
+                return null;
             }
-
             //JFuzzyChart.get().chart(fis);
-
-            fis.setVariable("temperature", 37.8);
-            fis.setVariable("heart_rate", 80);
-            fis.setVariable("rumination", 400);
-            fis.setVariable("humidity", 75);
+            fis.setVariable("temperature", temp);
+            fis.setVariable("heart_rate", heart);
+            fis.setVariable("rumination", rumination);
+            fis.setVariable("humidity", humidity);
             fis.evaluate();
 
             System.out.println("Hastalık Riski: " + fis.getVariable("disease_risk").getValue() + "%"
                     + fis.getVariable("disease_risk"));
+            return fis.getVariable("disease_risk").getValue();
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return null;
     }
 }
