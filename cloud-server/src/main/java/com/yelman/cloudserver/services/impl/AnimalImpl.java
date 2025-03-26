@@ -9,5 +9,5 @@ import java.util.List;
 public interface AnimalImpl {
     boolean addAnimal(AnimalDto animal);
     List<Animal> getAnimals(Long company);
-    boolean postSensor(SensorDto dto );
+    boolean postSensor(SensorDto dto,boolean dailyOrHourly );
 }

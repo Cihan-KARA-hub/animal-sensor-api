@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Hayvan Sağlık Bildirimi</title>
+</head>
+<body>
+<h3>Hayvan Sağlık Bildirimi</h3>
+<p><strong>İlgili hayvanın risk durumu nedeniyle e-posta gönderilmiştir.</strong></p>
+<table border="1" style="border-collapse: collapse; width: 100%;">
+    <tr><th>Bilgi</th><th>Değer</th></tr>
+    <tr><td><strong>Bulunduğu Çiftlik</strong></td><td>{{farmName}}</td></tr>
+    <tr><td><strong>Sıcaklık</strong></td><td>{{temperature}} °C</td></tr>
+    <tr><td><strong>Kalp Atışı</strong></td><td>{{heartRate}} bpm</td></tr>
+    <tr><td><strong>Geviş Getirme Sayısı</strong></td><td>{{chewingActivity}}</td></tr>
+    <tr><td><strong>Nem</strong></td><td>{{humidity}}%</td></tr>
+    <tr><td><strong>Veri Türü</strong></td><td>{{dataType}}</td></tr>
+</table>
+<p><em>Veri tarihi:</em> {{date}}</p>
+</body>
+</html>

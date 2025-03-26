@@ -1,10 +1,11 @@
 package com.yelman.cloudserver.utils.fuzzy;
 
+import com.yelman.cloudserver.api.dto.AlertDto;
 import net.sourceforge.jFuzzyLogic.FIS;
 
 public class DailyHealthCheck {
 
-    public static Double fuzzyLogicGeneral(double temp, int heart, int rumination, int humidity) {
+    public static Double fuzzyLogicGeneral(AlertDto dto) {
         try {
             String file = "C:/Users/cihan/OneDrive/Masaüstü/monitoring-cattle-health/cloud-server/src/main/java/com/yelman/cloudserver/utils/fuzzy/daily_health_check.fcl";
             if (file == null) {
@@ -17,10 +18,10 @@ public class DailyHealthCheck {
                 return null;
             }
             //JFuzzyChart.get().chart(fis);
-            fis.setVariable("temperature", temp);
-            fis.setVariable("heart_rate", heart);
-            fis.setVariable("rumination", rumination);
-            fis.setVariable("humidity", humidity);
+            fis.setVariable("temperature", dto.getTemp());
+            fis.setVariable("heart_rate", dto.getHeart());
+            fis.setVariable("rumination", dto.getRumination());
+            fis.setVariable("humidity", dto.getHumidity());
             fis.evaluate();
 
             System.out.println("Hastalık Riski: " + fis.getVariable("disease_risk").getValue() + "%"

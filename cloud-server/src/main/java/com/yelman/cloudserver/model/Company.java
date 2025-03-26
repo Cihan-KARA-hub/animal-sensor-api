@@ -14,10 +14,8 @@ public class Company {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
-
     @Column(name = "name", nullable = false, length = 100)
     private String name;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_company", nullable = false, foreignKey = @ForeignKey(name = "fk_users"))
     private Users user;
