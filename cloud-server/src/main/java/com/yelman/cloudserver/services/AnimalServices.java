@@ -8,7 +8,7 @@ import com.yelman.cloudserver.services.impl.AnimalImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,7 +23,10 @@ public class AnimalServices implements AnimalImpl {
     private final VetRepository vetRepository;
 
 
-    public AnimalServices(AnimalRepository animalRepository, CompanyRepository companyRepository, ChewingActivityRepository chewingActivityRepository, HeartBeatRepository heartBeatRepository, TemperatureHumidityRepository temperatureHumidityRepository, AlertServices alertServices, VetRepository vetRepository) {
+    public AnimalServices(AnimalRepository animalRepository, CompanyRepository companyRepository,
+                          ChewingActivityRepository chewingActivityRepository, HeartBeatRepository heartBeatRepository,
+                          TemperatureHumidityRepository temperatureHumidityRepository, AlertServices alertServices,
+                          VetRepository vetRepository) {
         this.animalRepository = animalRepository;
         this.companyRepository = companyRepository;
         this.chewingActivityRepository = chewingActivityRepository;
@@ -40,9 +43,15 @@ public class AnimalServices implements AnimalImpl {
     }
 
     @Override
-    public List<Animal> getAnimals(Long company) {
-        return animalRepository.findByCompany_Id(company);
+    public List<AnimalDto> getAnimals(Long company) {
+        List<Animal> entity = animalRepository.findByCompany_Id(company);
+        List<AnimalDto> dto = EntityToDto(entity);
+        if (entity.isEmpty()) {
+            return null;
+        }
+        return dto;
     }
+
 
     // saattlik post  günlük post olacak
     @Override
@@ -98,7 +107,7 @@ public class AnimalServices implements AnimalImpl {
         return true;
     }
 
-
+    // dto to entity mapper
     private Animal maptoAnimal(AnimalDto animalDto) {
         Animal newAnimal = new Animal();
         newAnimal.setBirthDate(animalDto.getBirthDate());
@@ -107,6 +116,20 @@ public class AnimalServices implements AnimalImpl {
         Company c = companyRepository.getById(animalDto.getCompany());
         newAnimal.setCompany(c);
         return newAnimal;
+    }
+
+    // entity list  to dto list  mapper
+    private List<AnimalDto> EntityToDto(List<Animal> entity) {
+
+        List<AnimalDto> dtos = new ArrayList<>();
+        for (Animal animal : entity) {
+            AnimalDto dto = new AnimalDto();
+            dto.setBirthDate(animal.getBirthDate());
+            dto.setTagId(animal.getTagId());
+            dto.setSpecies(animal.getSpecies());
+            dtos.add(dto);
+        }
+        return dtos;
     }
 
 

@@ -7,11 +7,12 @@ import com.yelman.cloudserver.services.impl.AlertsImpl;
 import com.yelman.cloudserver.utils.fuzzy.DailyHealthCheck;
 import com.yelman.cloudserver.utils.fuzzy.HourlyHealthCheck;
 import com.yelman.cloudserver.utils.mail.EmailNotificationService;
+import org.springframework.stereotype.Service;
 
 
 import java.io.IOException;
 
-
+@Service
 public class AlertServices implements AlertsImpl {
         EmailNotificationService emailNotificationService;
 
@@ -19,7 +20,7 @@ public class AlertServices implements AlertsImpl {
     public boolean emailManager(Vet vet, SensorDto dto, boolean dailyOrHourly)  {
         AlertDto c = toEntity(dto);
         String riskSituation;
-        //Hourly true
+
         Double a;
         if (dailyOrHourly) {
             a = hourlyActiveEmail(c);

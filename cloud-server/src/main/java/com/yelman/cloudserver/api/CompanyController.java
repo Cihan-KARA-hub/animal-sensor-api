@@ -3,10 +3,7 @@ package com.yelman.cloudserver.api;
 import com.yelman.cloudserver.api.dto.CompanyDto;
 import com.yelman.cloudserver.services.CompanyServices;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("api/v1/company")
@@ -24,4 +21,5 @@ public class CompanyController {
         if (result) return HttpStatus.CREATED;
         return HttpStatus.INTERNAL_SERVER_ERROR;
     }
+
 }

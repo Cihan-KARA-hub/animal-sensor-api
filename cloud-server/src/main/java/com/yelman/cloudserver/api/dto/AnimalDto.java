@@ -2,6 +2,7 @@ package com.yelman.cloudserver.api.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.yelman.cloudserver.model.Company;
+import jakarta.annotation.Nullable;
 
 import java.time.OffsetDateTime;
 import java.util.Date;
@@ -9,6 +10,7 @@ import java.util.Date;
 public class AnimalDto {
 
     private String tagId;
+    @Nullable
     private Long company;
     private String species;
     @JsonFormat(pattern="yyyy-MM-dd")

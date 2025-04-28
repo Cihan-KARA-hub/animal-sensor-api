@@ -5,6 +5,7 @@ import com.yelman.cloudserver.repository.UserRepository;
 import com.yelman.cloudserver.services.impl.UserServicesImpl;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -39,6 +40,7 @@ public class UserServices implements UserServicesImpl {
         return user.orElse(null);
     }
 
+
     @Override
     public void updateUser(Users user) {
 
@@ -48,4 +50,20 @@ public class UserServices implements UserServicesImpl {
     public void deleteUser(Long id) {
 
     }
+
+    @Override
+    public List<Users> getAllUser() {
+        List<Users> user = userRepository.findAll();
+        if (user.size() == 0) return null;
+        return user;
+    }
+
+    @Override
+    public boolean loginUserBoolean(String username, String password) {
+        Users user = userRepository.findByUsernameAndPassword(username, password).orElse(null);
+        if (user != null) return true;
+        else return false;
+    }
+
+
 }

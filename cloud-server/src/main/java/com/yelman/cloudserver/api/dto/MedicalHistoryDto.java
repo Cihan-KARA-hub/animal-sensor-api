@@ -18,7 +18,7 @@ public class MedicalHistoryDto {
     private Date recoveryDate;
 
 
-    public MedicalHistoryDto(Long animalId, String diseaseName, Date diagnosisDate, Date recoveryDate, String treatment, String veterinarian) {
+    public MedicalHistoryDto() {
         this.animalId = animalId;
         this.diseaseName = diseaseName;
         this.diagnosisDate = diagnosisDate;

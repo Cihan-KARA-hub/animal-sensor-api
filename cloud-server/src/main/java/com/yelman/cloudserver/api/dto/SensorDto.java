@@ -4,23 +4,23 @@ public class SensorDto {
     Long animalId;
     Integer chewingActivity;
     Integer heartBeat;
-    Double temperatureHumidity;
+    Double temperature;
     Double humidity;
 
     public SensorDto(Long animalId, Integer chewingActivity, Integer heartBeat, Double temperatureHumidity, Double humidity) {
         this.animalId = animalId;
         this.chewingActivity = chewingActivity;
         this.heartBeat = heartBeat;
-        this.temperatureHumidity = temperatureHumidity;
+        this.temperature = temperatureHumidity;
         this.humidity = humidity;
     }
 
     public Double getTemperatureHumidity() {
-        return temperatureHumidity;
+        return temperature;
     }
 
     public void setTemperatureHumidity(Double temperatureHumidity) {
-        this.temperatureHumidity = temperatureHumidity;
+        this.temperature = temperatureHumidity;
     }
 
     public Long getAnimalId() {

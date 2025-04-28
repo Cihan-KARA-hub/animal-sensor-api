@@ -28,9 +28,10 @@ FUZZIFY heart_rate
 END_FUZZIFY
 
 FUZZIFY rumination
-    TERM low := (300, 1) (450, 0);
-    TERM normal := (390, 0) (450, 1) (500, 0);
-    TERM high := (500, 0) (600, 1);
+    TERM low := (200, 1) (400, 0);
+    TERM normal := (350, 0) (450, 1) (550, 0);
+    TERM high := (500, 0) (650, 1);
+
 
 END_FUZZIFY
 

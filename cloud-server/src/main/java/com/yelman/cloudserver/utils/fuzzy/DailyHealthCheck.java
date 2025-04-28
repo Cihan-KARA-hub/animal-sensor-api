@@ -2,6 +2,7 @@ package com.yelman.cloudserver.utils.fuzzy;
 
 import com.yelman.cloudserver.api.dto.AlertDto;
 import net.sourceforge.jFuzzyLogic.FIS;
+import net.sourceforge.jFuzzyLogic.plot.JFuzzyChart;
 
 public class DailyHealthCheck {
 
@@ -17,7 +18,7 @@ public class DailyHealthCheck {
                 System.err.println("FCL dosyası yüklenemedi!");
                 return null;
             }
-            //JFuzzyChart.get().chart(fis);
+            JFuzzyChart.get().chart(fis);
             fis.setVariable("temperature", dto.getTemp());
             fis.setVariable("heart_rate", dto.getHeart());
             fis.setVariable("rumination", dto.getRumination());
