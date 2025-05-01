@@ -1,37 +1,69 @@
 package com.yelman.cloudserver.api.dto;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.yelman.cloudserver.model.ChewingActivity;
 import com.yelman.cloudserver.model.HeartBeat;
 import com.yelman.cloudserver.model.TemperatureHumidity;
-import org.springframework.data.domain.Page;
 
+import java.util.List;
+
+@JsonSerialize
 public class AnimalHealthDto {
-    private Page<HeartBeat> heartBeats;
-    private Page<TemperatureHumidity> temperatureHumidities;
-    private Page<ChewingActivity> chewingActivities;
+    private List<HeartBeat> heartBeats;
+    private List<TemperatureHumidity> temperatureHumidities;
+    private List<ChewingActivity> chewingActivities;
 
-    public Page<HeartBeat> getHeartBeats() {
-        return heartBeats;
+    private int currentPage;
+    private int totalPages;
+    private long totalElements;
+
+    public int getTotalPages() {
+        return totalPages;
     }
 
-    public void setHeartBeats(Page<HeartBeat> heartBeats) {
-        this.heartBeats = heartBeats;
+    public void setTotalPages(int totalPages) {
+        this.totalPages = totalPages;
     }
 
-    public Page<TemperatureHumidity> getTemperatureHumidities() {
+    public int getCurrentPage() {
+        return currentPage;
+    }
+
+    public void setCurrentPage(int currentPage) {
+        this.currentPage = currentPage;
+    }
+
+    public long getTotalElements() {
+        return totalElements;
+    }
+
+    public void setTotalElements(long totalElements) {
+        this.totalElements = totalElements;
+    }
+
+    public List<TemperatureHumidity> getTemperatureHumidities() {
         return temperatureHumidities;
     }
 
-    public void setTemperatureHumidities(Page<TemperatureHumidity> temperatureHumidities) {
+    public void setTemperatureHumidities(List<TemperatureHumidity> temperatureHumidities) {
         this.temperatureHumidities = temperatureHumidities;
     }
 
-    public Page<ChewingActivity> getChewingActivities() {
+    public List<HeartBeat> getHeartBeats() {
+        return heartBeats;
+    }
+
+    public void setHeartBeats(List<HeartBeat> heartBeats) {
+        this.heartBeats = heartBeats;
+    }
+
+    public List<ChewingActivity> getChewingActivities() {
         return chewingActivities;
     }
-    ;
 
-    public void setChewingActivities(Page<ChewingActivity> chewingActivities) {
+    public void setChewingActivities(List<ChewingActivity> chewingActivities) {
         this.chewingActivities = chewingActivities;
     }
+
+
 }

@@ -10,6 +10,6 @@ public interface AnimalImpl {
     boolean addAnimal(AnimalDto animal);
 
     List<AnimalDto> getAnimals(Long company);
+    boolean deleteAnimal(Long id);
 
-    boolean postSensor(SensorDto dto, boolean dailyOrHourly);
 }

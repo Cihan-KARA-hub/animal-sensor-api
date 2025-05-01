@@ -1,5 +1,6 @@
 package com.yelman.cloudserver.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -14,8 +15,8 @@ public class HeartBeat {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
-
-    @ManyToOne
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "animal_id", nullable = false, foreignKey = @ForeignKey(name = "fk_respiration_animal"))
     private Animal animal;
 

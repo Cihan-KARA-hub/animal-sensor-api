@@ -33,6 +33,11 @@ public class MedicalHistoryServices implements MedicalHistoryImp {
         return listToDto(medicalHistories);
     }
 
+    @Override
+    public void deleteMedicalHistory(long animalId) {
+        medicalHistoryRepository.deleteByAnimalId(animalId);
+
+    }
 
     private MedicalHistory mapToEntity(MedicalHistoryDto medicalHistoryDto) {
         MedicalHistory medicalHistory = new MedicalHistory();

@@ -2,8 +2,10 @@ package com.yelman.cloudserver.model;
 
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.context.annotation.Lazy;
 
 import java.time.OffsetDateTime;
 import java.util.Date;
@@ -19,7 +21,7 @@ public class Animal {
     private Long id;
     @Column(name = "tag_id", unique = true, nullable = false, length = 50)
     private String tagId;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "company_id", nullable = false, foreignKey = @ForeignKey(name = "fk_company"))
     private Company company;
     @Column(name = "species", nullable = false, length = 50)

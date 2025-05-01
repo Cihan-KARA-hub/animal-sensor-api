@@ -26,7 +26,7 @@ public class EmailNotificationService {
 
         Map<String, String> emailData = new HashMap<>();
         emailData.put("farmName", vet.getResponsibleCompany().getName());
-        emailData.put("temperature", String.valueOf(dto.getTemperatureHumidity()));
+        emailData.put("temperature", String.valueOf(dto.getTemperature()));
         emailData.put("heartRate", String.valueOf(dto.getHeartBeat()));
         emailData.put("dataType", dailyOrHourly ? "Saatlik verilerdir !!" : "Günlük verilerilerdir !!");
         emailData.put("chewingActivity", String.valueOf(dto.getChewingActivity()));

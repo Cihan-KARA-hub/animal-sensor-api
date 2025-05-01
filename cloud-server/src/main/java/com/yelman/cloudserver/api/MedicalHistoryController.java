@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@CrossOrigin(origins = "http://localhost:65017")
+@CrossOrigin(origins = "http://localhost:56038")
 @RestController
 @RequestMapping("api/v1/medical-history")
 public class MedicalHistoryController {
@@ -19,11 +19,11 @@ public class MedicalHistoryController {
     }
 
     @GetMapping("/{id}")
-    public HttpStatus getMedicalHistory(@PathVariable Long id) {
+    public List<MedicalHistoryDto> getMedicalHistory(@PathVariable Long id) {
         List<MedicalHistoryDto> dto = medicalHistoryServices.getMedicalHistory(id);
         if (dto.isEmpty()) {
-            return HttpStatus.NOT_FOUND;
+            return null;
         }
-        return HttpStatus.OK;
+        return dto;
     }
 }

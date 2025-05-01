@@ -14,6 +14,7 @@ import com.yelman.cloudserver.services.impl.AnimalHealthRuntimeImpl;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -40,18 +41,23 @@ public class AnimalHealthRuntimeServices implements AnimalHealthRuntimeImpl {
         Page<ChewingActivity> c = chewingActivityRepository.findByAnimal_Id(animalId, pageable);
 
         AnimalHealthDto animalHealthDto = new AnimalHealthDto();
-        animalHealthDto.setHeartBeats(h);
-        animalHealthDto.setTemperatureHumidities(a);
-        animalHealthDto.setChewingActivities(c);
+        animalHealthDto.setHeartBeats(h.getContent());
+        animalHealthDto.setTemperatureHumidities(a.getContent());
+        animalHealthDto.setChewingActivities(c.getContent());
+
+        animalHealthDto.setCurrentPage(h.getNumber());
+        animalHealthDto.setTotalPages(h.getTotalPages());
+        animalHealthDto.setTotalElements(h.getTotalElements());
         return animalHealthDto;
 
     }
 
     @Override
+    @Transactional
     public boolean addAnimalHealthHourlyRuntime(SensorDto animal) {
         boolean a = addChewingActivity(animal.getAnimalId(), animal.getChewingActivity());
         boolean b = addHeartBeat(animal.getAnimalId(), animal.getHeartBeat());
-        boolean c = addTemperatureHumidity(animal.getAnimalId(), animal.getTemperatureHumidity(), animal.getHumidity());
+        boolean c = addTemperatureHumidity(animal.getAnimalId(), animal.getTemperature(), animal.getHumidity());
         if (a || b || c) {
             return true;
         }

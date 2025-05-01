@@ -1,9 +1,11 @@
 package com.yelman.cloudserver.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.OffsetDateTime;
+
 
 @Entity
 @Table(name = "users")

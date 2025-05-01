@@ -9,7 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-@CrossOrigin(origins = "http://localhost:65017")
+@CrossOrigin(origins = "http://localhost:56038")
 @RestController
 @RequestMapping("api/v1/animal")
 public class AnimalController {
@@ -55,13 +55,5 @@ public class AnimalController {
         return HttpStatus.BAD_REQUEST;
     }
 
-    @PostMapping("/daily-sensor")
-    public HttpStatus postDailySensor(@RequestBody SensorDto sensors) {
-        boolean a = animalService.postSensor(sensors, false);
-        if (a) {
-            return HttpStatus.CREATED;
-        }
-        return HttpStatus.BAD_REQUEST;
-    }
 
 }

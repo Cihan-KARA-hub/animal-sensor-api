@@ -9,4 +9,5 @@ public interface MedicalHistoryImp {
 
     boolean addMedicalHistory(MedicalHistoryDto medicalHistory);
     List<MedicalHistoryDto> getMedicalHistory(long id);
+    void deleteMedicalHistory(long id);
 }

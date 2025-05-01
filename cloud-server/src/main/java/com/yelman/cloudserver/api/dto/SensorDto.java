@@ -15,11 +15,11 @@ public class SensorDto {
         this.humidity = humidity;
     }
 
-    public Double getTemperatureHumidity() {
+    public Double getTemperature() {
         return temperature;
     }
 
-    public void setTemperatureHumidity(Double temperatureHumidity) {
+    public void setTemperature(Double temperatureHumidity) {
         this.temperature = temperatureHumidity;
     }
 

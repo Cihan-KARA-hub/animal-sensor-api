@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 
 import java.io.IOException;
-
+//TODO  burda bir tetiklenme mekanizması  oluşturulacak
 @Service
 public class AlertServices implements AlertsImpl {
         EmailNotificationService emailNotificationService;
@@ -24,7 +24,6 @@ public class AlertServices implements AlertsImpl {
         Double a;
         if (dailyOrHourly) {
             a = hourlyActiveEmail(c);
-
         } else {
             a = dailyActiveEmail(c);
         }
@@ -60,7 +59,7 @@ public class AlertServices implements AlertsImpl {
         AlertDto c = new AlertDto();
         c.setHeart(dto.getHeartBeat());
         c.setHumidity(dto.getHumidity());
-        c.setTemp(dto.getTemperatureHumidity());
+        c.setTemp(dto .getTemperature());
         c.setRumination(dto.getChewingActivity());
         return c;
     }

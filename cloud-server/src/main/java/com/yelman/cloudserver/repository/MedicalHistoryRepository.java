@@ -9,5 +9,5 @@ import java.util.List;
 @Repository
 public interface MedicalHistoryRepository extends JpaRepository<MedicalHistory, Long> {
 List<MedicalHistory> findByAnimalId(Long animalId);
-
+boolean deleteByAnimalId(Long animalId);
 }
