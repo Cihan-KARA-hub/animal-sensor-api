@@ -46,14 +46,4 @@ public class AnimalController {
 
     }
 
-    @PostMapping("/hourly-sensor")
-    public HttpStatus postHourlySensor(@RequestBody SensorDto sensors) {
-        boolean a = animalService.postSensor(sensors, true);
-        if (a) {
-            return HttpStatus.CREATED;
-        }
-        return HttpStatus.BAD_REQUEST;
-    }
-
-
 }

@@ -3,29 +3,21 @@ package com.yelman.cloudserver.api.dto;
 import java.io.Serializable;
 
 public class EmailSendDto implements Serializable {
-    private String recipient;//alıcı
-    private String msgBody;//mesaj body
+    private String recipient;
+    private String msgBody;
+    private String subject;
+    private byte[] attachmentData;
+    private String attachmentName;
 
     public EmailSendDto() {
-
     }
 
-    private String subject;//konusu
-    private String attachment;//eki
-
-    public EmailSendDto(String recipient, String msgBody, String subject, String attachment) {
-        this.recipient = recipient;
-        this.msgBody = msgBody;
-        this.subject = subject;
-        this.attachment = attachment;
+    public byte[] getAttachmentData() {
+        return attachmentData;
     }
 
-    public String getSubject() {
-        return subject;
-    }
-
-    public void setSubject(String subject) {
-        this.subject = subject;
+    public void setAttachmentData(byte[] attachmentData) {
+        this.attachmentData = attachmentData;
     }
 
     public String getRecipient() {
@@ -44,11 +36,20 @@ public class EmailSendDto implements Serializable {
         this.msgBody = msgBody;
     }
 
-    public String getAttachment() {
-        return attachment;
+    public String getSubject() {
+        return subject;
     }
 
-    public void setAttachment(String attachment) {
-        this.attachment = attachment;
+    public void setSubject(String subject) {
+        this.subject = subject;
     }
+
+    public String getAttachmentName() {
+        return attachmentName;
+    }
+
+    public void setAttachmentName(String attachmentName) {
+        this.attachmentName = attachmentName;
+    }
+
 }

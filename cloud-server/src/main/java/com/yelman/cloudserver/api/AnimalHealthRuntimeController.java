@@ -17,6 +17,7 @@ public class AnimalHealthRuntimeController {
 
     public AnimalHealthRuntimeController(AnimalHealthRuntimeServices animalHealthRuntimeServices) {
         this.animalHealthRuntimeServices = animalHealthRuntimeServices;
+
     }
 
     @GetMapping
@@ -39,4 +40,5 @@ public class AnimalHealthRuntimeController {
         }
         return HttpStatus.BAD_REQUEST;
     }
+
 }

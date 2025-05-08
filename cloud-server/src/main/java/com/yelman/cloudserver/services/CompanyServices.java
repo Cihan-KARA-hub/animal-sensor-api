@@ -8,6 +8,7 @@ import com.yelman.cloudserver.services.impl.CompanyImpl;
 import org.springframework.stereotype.Service;
 
 import java.time.OffsetDateTime;
+import java.util.List;
 
 @Service
 public class CompanyServices implements CompanyImpl {
@@ -25,6 +26,11 @@ public class CompanyServices implements CompanyImpl {
         Company c = companyRepository.save(mapToCompany(companyDto));
         return c.getId() != null;
 
+    }
+
+    @Override
+    public List<Long> getAllCompanyId() {
+        return companyRepository.findAllCompanyId();
     }
 
     private Company mapToCompany(CompanyDto companyDto) {

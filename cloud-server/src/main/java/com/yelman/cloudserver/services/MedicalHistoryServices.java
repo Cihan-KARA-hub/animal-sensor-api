@@ -36,7 +36,6 @@ public class MedicalHistoryServices implements MedicalHistoryImp {
     @Override
     public void deleteMedicalHistory(long animalId) {
         medicalHistoryRepository.deleteByAnimalId(animalId);
-
     }
 
     private MedicalHistory mapToEntity(MedicalHistoryDto medicalHistoryDto) {

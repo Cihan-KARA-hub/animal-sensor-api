@@ -1,22 +1,26 @@
 package com.yelman.cloudserver.services;
 
+import com.itextpdf.text.DocumentException;
 import com.yelman.cloudserver.api.dto.AnimalHealthDto;
+import com.yelman.cloudserver.api.dto.EmailSendDto;
+import com.yelman.cloudserver.api.dto.PdfSensorDto;
 import com.yelman.cloudserver.api.dto.SensorDto;
-import com.yelman.cloudserver.model.Animal;
-import com.yelman.cloudserver.model.ChewingActivity;
-import com.yelman.cloudserver.model.HeartBeat;
-import com.yelman.cloudserver.model.TemperatureHumidity;
-import com.yelman.cloudserver.repository.AnimalRepository;
-import com.yelman.cloudserver.repository.ChewingActivityRepository;
-import com.yelman.cloudserver.repository.HeartBeatRepository;
-import com.yelman.cloudserver.repository.TemperatureHumidityRepository;
+import com.yelman.cloudserver.model.*;
+import com.yelman.cloudserver.repository.*;
+import com.yelman.cloudserver.services.core.FuzzyLogicService;
 import com.yelman.cloudserver.services.impl.AnimalHealthRuntimeImpl;
+import com.yelman.cloudserver.utils.mail.mails.EmailServiceImpl;
+import com.yelman.cloudserver.utils.pdf.PdfGenerator;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+
 
 @Service
 public class AnimalHealthRuntimeServices implements AnimalHealthRuntimeImpl {
@@ -25,12 +29,28 @@ public class AnimalHealthRuntimeServices implements AnimalHealthRuntimeImpl {
     private final HeartBeatRepository heartBeatRepository;
     private final AnimalRepository animalRepository;
     private final TemperatureHumidityRepository temperatureHumidityRepositoryRepository;
+    private final FuzzyLogicService fuzzyLogicService;
+    private final PdfGenerator pdfGenerator;
+    private final CompanyRepository companyRepository;
+    private final EmailServiceImpl emailServiceImpl;
 
-    public AnimalHealthRuntimeServices(ChewingActivityRepository chewingActivityRepository, HeartBeatRepository heartBeatRepository, AnimalRepository animalRepository, TemperatureHumidityRepository temperatureHumidityRepositoryRepository) {
+
+    public AnimalHealthRuntimeServices(ChewingActivityRepository chewingActivityRepository,
+                                       HeartBeatRepository heartBeatRepository,
+                                       AnimalRepository animalRepository,
+                                       TemperatureHumidityRepository temperatureHumidityRepositoryRepository,
+                                       FuzzyLogicService fuzzyLogicService,
+                                       PdfGenerator pdfGenerator,
+                                       CompanyRepository companyRepository,
+                                       EmailServiceImpl emailServiceImpl) {
         this.chewingActivityRepository = chewingActivityRepository;
         this.heartBeatRepository = heartBeatRepository;
         this.animalRepository = animalRepository;
         this.temperatureHumidityRepositoryRepository = temperatureHumidityRepositoryRepository;
+        this.fuzzyLogicService = fuzzyLogicService;
+        this.pdfGenerator = pdfGenerator;
+        this.companyRepository = companyRepository;
+        this.emailServiceImpl = emailServiceImpl;
     }
 
     @Override
@@ -52,16 +72,74 @@ public class AnimalHealthRuntimeServices implements AnimalHealthRuntimeImpl {
 
     }
 
-    @Override
     @Transactional
+    @Override
     public boolean addAnimalHealthHourlyRuntime(SensorDto animal) {
         boolean a = addChewingActivity(animal.getAnimalId(), animal.getChewingActivity());
         boolean b = addHeartBeat(animal.getAnimalId(), animal.getHeartBeat());
         boolean c = addTemperatureHumidity(animal.getAnimalId(), animal.getTemperature(), animal.getHumidity());
         if (a || b || c) {
+            fuzzyLogicService.fuzzyLogicRealtime(animal);
             return true;
         }
         return false;
+    }
+
+    public void dailyFuzzyLogic() {
+        List<Long> animalId = animalRepository.findAllAnimalId();
+        for (Long animalId1 : animalId) {
+            fuzzyLogicService.dailyFuzzyLogic(animalId1);
+        }
+    }
+
+    @Override
+    @Transactional
+    public void weeklyPdfMailLogic(Long companyId) throws DocumentException, IOException {
+        Optional<Company> company = companyRepository.findById(companyId);
+        List<Long> animalId = animalRepository.findAllAnimalIdByCompany_Id(companyId);
+        List<PdfSensorDto> dto = new ArrayList<>();
+        for (Long animalId1 : animalId) {
+            dto.add(fuzzyLogicService.weeklyPdfMailLogic(animalId1));
+        }
+
+        byte[] pdf = pdfGenerator.export(dto);
+        EmailSendDto dtos = new EmailSendDto();
+                dtos.setAttachmentName("Pdf Görüntüleme");
+                dtos.setRecipient(company.get().getUser().getEmail());
+                dtos.setSubject(company.get().getName()+" Haftalık çiftlik raporu");
+                dtos.setMsgBody("Haftalık Hayvan verileri ektedir ");
+                dtos.setAttachmentData(pdf);
+        emailServiceImpl.sendMailWithAttachment(dtos);
+    }
+
+    @Transactional
+    @Override
+    public void deleteAllSensorAnimalId(Long animalId) {
+        deleteChewingActivity(animalId);
+        deleteHeartBeat(animalId);
+        deleteTemperatureAndHumidity(animalId);
+    }
+
+
+    private void deleteChewingActivity(Long animalId) {
+        getByAnimal(animalId).ifPresent(chewingActivity -> {
+            chewingActivityRepository.deleteById(chewingActivity.getId());
+        });
+    }
+
+    private void deleteTemperatureAndHumidity(Long animalId) {
+        getByAnimal(animalId).ifPresent(chewingActivity -> {
+            temperatureHumidityRepositoryRepository.deleteById(chewingActivity.getId());
+        });
+
+    }
+
+
+    private void deleteHeartBeat(Long animalId) {
+        getByAnimal(animalId).ifPresent(chewingActivity -> {
+            heartBeatRepository.deleteById(chewingActivity.getId());
+        });
+
     }
 
 

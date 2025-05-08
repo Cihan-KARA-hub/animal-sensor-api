@@ -7,6 +7,7 @@ import com.yelman.cloudserver.repository.AnimalRepository;
 import com.yelman.cloudserver.repository.CompanyRepository;
 import com.yelman.cloudserver.services.impl.AnimalImpl;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,16 +16,22 @@ import java.util.List;
 public class AnimalServices implements AnimalImpl {
     private final AnimalRepository animalRepository;
     private final CompanyRepository companyRepository;
+    private final MedicalHistoryServices medicalHistoryServices;
+    private final AnimalHealthRuntimeServices animalHealthRuntimeServices;
 
-    public AnimalServices(AnimalRepository animalRepository, CompanyRepository companyRepository) {
+    public AnimalServices(AnimalRepository animalRepository, CompanyRepository companyRepository, MedicalHistoryServices medicalHistoryServices, AnimalHealthRuntimeServices animalHealthRuntimeServices) {
         this.animalRepository = animalRepository;
         this.companyRepository = companyRepository;
+        this.medicalHistoryServices = medicalHistoryServices;
+        this.animalHealthRuntimeServices = animalHealthRuntimeServices;
     }
+
     @Override
     public boolean addAnimal(AnimalDto animal) {
         Animal newAnimal = animalRepository.save(maptoAnimal(animal));
         return newAnimal.getId() != null;
     }
+
     @Override
     public List<AnimalDto> getAnimals(Long company) {
         List<Animal> entity = animalRepository.findByCompany_Id(company);
@@ -35,14 +42,17 @@ public class AnimalServices implements AnimalImpl {
         return dto;
     }
 
+    @Transactional
     @Override
     public boolean deleteAnimal(Long id) {
         Animal animal = animalRepository.findById(id).orElse(null);
         if (animal == null) {
             return false;
         }
-        // ilgili  verileri de sil
+        animalHealthRuntimeServices.deleteAllSensorAnimalId(id);
+        medicalHistoryServices.deleteMedicalHistory(id);
         animalRepository.delete(animal);
+        return true;
     }
 
     private Animal maptoAnimal(AnimalDto animalDto) {
@@ -54,6 +64,7 @@ public class AnimalServices implements AnimalImpl {
         newAnimal.setCompany(c);
         return newAnimal;
     }
+
     private List<AnimalDto> EntityToDto(List<Animal> entity) {
         List<AnimalDto> dtos = new ArrayList<>();
         for (Animal animal : entity) {

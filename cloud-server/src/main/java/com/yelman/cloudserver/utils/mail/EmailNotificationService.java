@@ -3,6 +3,7 @@ package com.yelman.cloudserver.utils.mail;
 import com.yelman.cloudserver.api.dto.EmailSendDto;
 import com.yelman.cloudserver.api.dto.SensorDto;
 import com.yelman.cloudserver.model.Vet;
+import jakarta.mail.internet.MimeMessage;
 import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -10,12 +11,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-@Service
+
 public class EmailNotificationService {
-
-
-    private EmailService emailService;  // DI ile alınmalı
-
+    private   EmailService emailService;
     public void sendEmail(Vet vet, SensorDto dto, boolean dailyOrHourly, String riskSituation) throws IOException {
         if (vet == null || vet.getUser() == null || vet.getResponsibleCompany() == null ||
                 vet.getResponsibleCompany().getUser() == null) {
@@ -49,6 +47,19 @@ public class EmailNotificationService {
         emailDto.setSubject(animalId + " - Hayvan Sağlık Durumu (" + riskSituation + ")");
         emailDto.setMsgBody(emailContent);
 
-        emailService.sendHtmlMail(emailDto);
+        emailService.sendSimpleMail(emailDto);
+    }
+
+    private void sendEmailToUserAtch(String recipient,byte[] pdf) {
+        if (recipient == null || recipient.isEmpty()) {
+            return;
+        }
+        EmailSendDto emailDto = new EmailSendDto();
+        emailDto.setRecipient(recipient);
+        emailDto.setSubject("Haftalık Saglık raporunuz ektedir .");
+        emailService.sendHtmlMail(emailDto,pdf);
+    }
+    public void sendEmailAtc(byte[] pdf,String email ){
+        sendEmailToUserAtch(email,pdf);
     }
 }

@@ -1,28 +1,18 @@
 package com.yelman.cloudserver.api.dto;
 
-import jakarta.annotation.Nullable;
 
-public class AlertDto {
+public class AlertRealtimeDto {
     double temp;
     int heart;
-    int rumination;
-    @Nullable()
     Double humidity;
 
-    public AlertDto(double temp, int heart, int rumination, Double humidity) {
+    public AlertRealtimeDto(double temp, int heart, Double humidity) {
         this.temp = temp;
         this.heart = heart;
-        this.rumination = rumination;
         this.humidity = humidity;
     }
 
-
-    public double getTemp() {
-        return temp;
-    }
-
-    public void setTemp(double temp) {
-        this.temp = temp;
+    public AlertRealtimeDto() {
     }
 
     public int getHeart() {
@@ -33,12 +23,12 @@ public class AlertDto {
         this.heart = heart;
     }
 
-    public int getRumination() {
-        return rumination;
+    public double getTemp() {
+        return temp;
     }
 
-    public void setRumination(int rumination) {
-        this.rumination = rumination;
+    public void setTemp(double temp) {
+        this.temp = temp;
     }
 
     public Double getHumidity() {

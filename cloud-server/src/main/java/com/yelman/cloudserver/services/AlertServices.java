@@ -1,65 +1,56 @@
 package com.yelman.cloudserver.services;
 
 import com.yelman.cloudserver.api.dto.AlertDto;
+import com.yelman.cloudserver.api.dto.EmailSendDto;
 import com.yelman.cloudserver.api.dto.SensorDto;
 import com.yelman.cloudserver.model.Vet;
 import com.yelman.cloudserver.services.impl.AlertsImpl;
-import com.yelman.cloudserver.utils.fuzzy.DailyHealthCheck;
-import com.yelman.cloudserver.utils.fuzzy.HourlyHealthCheck;
-import com.yelman.cloudserver.utils.mail.EmailNotificationService;
+import com.yelman.cloudserver.utils.fuzzy.HealthCheck;
+import com.yelman.cloudserver.utils.mail.mails.EmailServiceImpl;
 import org.springframework.stereotype.Service;
 
-
-import java.io.IOException;
-//TODO  burda bir tetiklenme mekanizması  oluşturulacak
 @Service
 public class AlertServices implements AlertsImpl {
-        EmailNotificationService emailNotificationService;
+
+    private final EmailServiceImpl emailService;
+
+    public AlertServices(EmailServiceImpl emailService) {
+        this.emailService = emailService;
+    }
 
     @Override
-    public boolean emailManager(Vet vet, SensorDto dto, boolean dailyOrHourly)  {
+    public boolean emailManager(Vet vet, SensorDto dto, boolean dailyOrHourly, String riskSituation) {
         AlertDto c = toEntity(dto);
-        String riskSituation;
-
         Double a;
-        if (dailyOrHourly) {
-            a = hourlyActiveEmail(c);
-        } else {
-            a = dailyActiveEmail(c);
-        }
+        a = dailyActiveEmail(c);
+        EmailSendDto emailSendDto = new EmailSendDto();
+        emailSendDto.setRecipient(vet.getUser().getEmail());
+        emailSendDto.setSubject(" %" + riskSituation + "ihtimalle ilgili hayvan riskte !!");
+        emailSendDto.setMsgBody("Hayvan id'si :" + dto.getAnimalId().toString() + "\n" +
+                "Kalp Atış hızı : " + dto.getHeartBeat() + "\n" +
+                "Vücut Sıcaklıgı : " + dto.getTemperature() + "\n"
+        );
+
+
         if (a > 80) {
-            riskSituation = " Kritik";
-            try {
-                emailNotificationService.sendEmail(vet, dto, dailyOrHourly, riskSituation);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+            emailService.sendSimpleMail(emailSendDto);
         }
-        ;
         if (a > 65) {
-            riskSituation = "Riskli olabilir ";
-            try {
-                emailNotificationService.sendEmail(vet, dto, dailyOrHourly, riskSituation);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+            emailService.sendSimpleMail(emailSendDto);
         }
         return true;
     }
 
-    private Double hourlyActiveEmail(AlertDto dto) {
-        return HourlyHealthCheck.hourlyHealthCheck(dto);
-    }
 
     private Double dailyActiveEmail(AlertDto dto) {
-        return DailyHealthCheck.fuzzyLogicGeneral(dto);
+        return HealthCheck.fuzzyLogicGeneral(dto);
     }
 
     private AlertDto toEntity(SensorDto dto) {
-        AlertDto c = new AlertDto();
+        AlertDto c = new AlertDto(dto.getTemperature(), dto.getHeartBeat(), dto.getChewingActivity(), dto.getHumidity());
         c.setHeart(dto.getHeartBeat());
         c.setHumidity(dto.getHumidity());
-        c.setTemp(dto .getTemperature());
+        c.setTemp(dto.getTemperature());
         c.setRumination(dto.getChewingActivity());
         return c;
     }
