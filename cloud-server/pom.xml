@@ -81,6 +81,13 @@
             <artifactId>pdfbox</artifactId>
             <version>3.0.0</version>
         </dependency>
+        <!--Env  config  -->
+        <!-- https://mvnrepository.com/artifact/io.github.cdimascio/dotenv-java -->
+        <dependency>
+            <groupId>io.github.cdimascio</groupId>
+            <artifactId>dotenv-java</artifactId>
+            <version>3.0.0</version>
+        </dependency>
     </dependencies>
 
     <build>
