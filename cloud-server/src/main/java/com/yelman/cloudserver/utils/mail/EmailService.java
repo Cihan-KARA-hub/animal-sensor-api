@@ -14,25 +14,31 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class EmailService {
-    private JavaMailSender mailSender;
+    private final JavaMailSender mailSender;
     @Value("${spring.mail.username}")
     private String emailUsername;
-    public void sendSimpleMail(EmailSendDto details) {
-        try {
-            SimpleMailMessage message = new SimpleMailMessage();
-            message.setFrom(emailUsername);
-            message.setTo(details.getRecipient());
-            message.setSubject(details.getSubject());
-            message.setText(details.getMsgBody());
 
-            mailSender.send(message);
-            ResponseEntity.ok("Email sent");
-        } catch (Exception e) {
-            e.printStackTrace();
-            ResponseEntity.badRequest().body("Something went wrong");
-        }
+    public EmailService(JavaMailSender mailSender) {
+        this.mailSender = mailSender;
     }
 
+    public void sendSimpleMail(EmailSendDto details)  {
+        try {
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-16");
+
+            helper.setFrom(emailUsername);
+            helper.setTo(details.getRecipient());
+            helper.setSubject(details.getSubject());
+            helper.setText(details.getMsgBody(), true);
+
+            mailSender.send(message);
+            System.out.println("✅ HTML Email sent successfully!");
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("❌ Error while sending HTML email.");
+        }
+    }
     public void sendHtmlMail(EmailSendDto details, byte[] pdfBytes) {
         try {
             MimeMessage message = mailSender.createMimeMessage();
@@ -41,14 +47,22 @@ public class EmailService {
             helper.setFrom(emailUsername);
             helper.setTo(details.getRecipient());
             helper.setSubject(details.getSubject());
-            helper.addAttachment("weekly_report.pdf", new ByteArrayDataSource(pdfBytes, "application/pdf"));
-            helper.setText(details.getMsgBody(), true);
+
+            // ✅ Null kontrolü: Eğer body null gelirse boş string yapar
+            String safeBody = details.getMsgBody() != null ? details.getMsgBody() : "";
+            helper.setText(safeBody, true);
+
+            // ✅ PDF eklenecekse null değilse ekle
+            if (pdfBytes != null) {
+                helper.addAttachment("weekly_report.pdf", new ByteArrayDataSource(pdfBytes, "application/pdf"));
+            }
 
             mailSender.send(message);
-            ResponseEntity.ok("HTML Email sent successfully!");
+            System.out.println("✅ HTML Email sent successfully!");
         } catch (Exception e) {
             e.printStackTrace();
-            ResponseEntity.badRequest().body("Error while sending HTML email.");
+            System.out.println("❌ Error while sending HTML email.");
         }
     }
+
 }

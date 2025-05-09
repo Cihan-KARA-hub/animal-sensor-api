@@ -11,9 +11,14 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-
+@Service
 public class EmailNotificationService {
-    private   EmailService emailService;
+    private final    EmailService emailService;
+
+    public EmailNotificationService(EmailService emailService) {
+        this.emailService = emailService;
+    }
+
     public void sendEmail(Vet vet, SensorDto dto, boolean dailyOrHourly, String riskSituation) throws IOException {
         if (vet == null || vet.getUser() == null || vet.getResponsibleCompany() == null ||
                 vet.getResponsibleCompany().getUser() == null) {
@@ -44,7 +49,7 @@ public class EmailNotificationService {
 
         EmailSendDto emailDto = new EmailSendDto();
         emailDto.setRecipient(recipient);
-        emailDto.setSubject(animalId + " - Hayvan Sağlık Durumu (" + riskSituation + ")");
+        emailDto.setSubject(animalId + "'li Hayvanın Sağlık Riski (" + riskSituation + ")");
         emailDto.setMsgBody(emailContent);
 
         emailService.sendSimpleMail(emailDto);

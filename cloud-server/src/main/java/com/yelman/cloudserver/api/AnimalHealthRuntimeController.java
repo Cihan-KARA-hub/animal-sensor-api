@@ -3,23 +3,24 @@ package com.yelman.cloudserver.api;
 import com.yelman.cloudserver.api.dto.AnimalHealthDto;
 import com.yelman.cloudserver.api.dto.SensorDto;
 import com.yelman.cloudserver.services.AnimalHealthRuntimeServices;
+import com.yelman.cloudserver.services.impl.AnimalHealthRuntimeImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+
 @CrossOrigin(origins = "http://localhost:56038")
 @RestController
 @RequestMapping("api/v1/animal-health")
 public class AnimalHealthRuntimeController {
-    private final AnimalHealthRuntimeServices animalHealthRuntimeServices;
-
-    public AnimalHealthRuntimeController(AnimalHealthRuntimeServices animalHealthRuntimeServices) {
+    private final AnimalHealthRuntimeImpl animalHealthRuntimeServices;
+    public AnimalHealthRuntimeController(AnimalHealthRuntimeImpl animalHealthRuntimeServices) {
         this.animalHealthRuntimeServices = animalHealthRuntimeServices;
 
     }
-
     @GetMapping
     public ResponseEntity<AnimalHealthDto> getAnimalHealthDto(@RequestParam Long animalId,
                                                               @RequestParam(defaultValue = "0") int page,
@@ -33,7 +34,7 @@ public class AnimalHealthRuntimeController {
     }
 
     @PostMapping("/post-sensor")
-    public HttpStatus createAnimalHealthDto(@RequestBody SensorDto dto) {
+    public HttpStatus createAnimalHealthDto(@RequestBody SensorDto dto) throws IOException {
         boolean a = animalHealthRuntimeServices.addAnimalHealthHourlyRuntime(dto);
         if (a) {
             return HttpStatus.CREATED;

@@ -2,6 +2,7 @@ package com.yelman.cloudserver.api;
 
 import com.yelman.cloudserver.api.dto.MedicalHistoryDto;
 import com.yelman.cloudserver.services.MedicalHistoryServices;
+import com.yelman.cloudserver.services.impl.MedicalHistoryImp;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,9 +13,9 @@ import java.util.List;
 @RequestMapping("api/v1/medical-history")
 public class MedicalHistoryController {
 
-    private final MedicalHistoryServices medicalHistoryServices;
+    private final MedicalHistoryImp medicalHistoryServices;
 
-    public MedicalHistoryController(MedicalHistoryServices medicalHistoryServices) {
+    public MedicalHistoryController(MedicalHistoryImp medicalHistoryServices) {
         this.medicalHistoryServices = medicalHistoryServices;
     }
 

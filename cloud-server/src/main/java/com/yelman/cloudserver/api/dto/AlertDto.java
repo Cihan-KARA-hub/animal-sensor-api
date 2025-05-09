@@ -5,11 +5,11 @@ import jakarta.annotation.Nullable;
 public class AlertDto {
     double temp;
     int heart;
-    int rumination;
+    double rumination;
     @Nullable()
     Double humidity;
 
-    public AlertDto(double temp, int heart, int rumination, Double humidity) {
+    public AlertDto(double temp, int heart, double rumination, Double humidity) {
         this.temp = temp;
         this.heart = heart;
         this.rumination = rumination;
@@ -33,11 +33,11 @@ public class AlertDto {
         this.heart = heart;
     }
 
-    public int getRumination() {
+    public double getRumination() {
         return rumination;
     }
 
-    public void setRumination(int rumination) {
+    public void setRumination(double rumination) {
         this.rumination = rumination;
     }
 

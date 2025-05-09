@@ -11,10 +11,10 @@ public interface AnimalHealthRuntimeImpl {
 
     AnimalHealthDto getAnimals(Long animalId, Pageable pageable);
 
-    boolean addAnimalHealthHourlyRuntime(SensorDto animal);
+    boolean addAnimalHealthHourlyRuntime(SensorDto animal) throws IOException;
 
     void deleteAllSensorAnimalId(Long animalId);
 
-    void weeklyPdfMailLogic(Long companyId) throws DocumentException, IOException;
+    void weeklyAndDailyPdfMailLogic(Long companyId,boolean weekIsDay) throws DocumentException, IOException;
 
 }

@@ -4,15 +4,23 @@ package com.yelman.cloudserver.api.dto;
 public class PdfSensorDto {
 
     String tag_id;
-    Integer chewingActivity;
+    Double chewingActivity;
     Integer heartBeat;
     Double temperature;
     Double humidity;
-    int date;
+    String Date;
     Double riskScore;
 
     public PdfSensorDto() {
 
+    }
+
+    public String getDate() {
+        return Date;
+    }
+
+    public void setDate(String date) {
+        Date = date;
     }
 
     public Double getRiskScore() {
@@ -39,11 +47,11 @@ public class PdfSensorDto {
         this.tag_id = tag_id;
     }
 
-    public Integer getChewingActivity() {
+    public Double getChewingActivity() {
         return chewingActivity;
     }
 
-    public void setChewingActivity(Integer chewingActivity) {
+    public void setChewingActivity(Double chewingActivity) {
         this.chewingActivity = chewingActivity;
     }
 
@@ -61,13 +69,5 @@ public class PdfSensorDto {
 
     public void setHumidity(Double humidity) {
         this.humidity = humidity;
-    }
-
-    public int getDate() {
-        return date;
-    }
-
-    public void setDate(int date) {
-        this.date = date;
     }
 }

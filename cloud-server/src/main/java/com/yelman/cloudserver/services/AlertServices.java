@@ -1,44 +1,38 @@
 package com.yelman.cloudserver.services;
 
 import com.yelman.cloudserver.api.dto.AlertDto;
-import com.yelman.cloudserver.api.dto.EmailSendDto;
 import com.yelman.cloudserver.api.dto.SensorDto;
 import com.yelman.cloudserver.model.Vet;
 import com.yelman.cloudserver.services.impl.AlertsImpl;
 import com.yelman.cloudserver.utils.fuzzy.HealthCheck;
-import com.yelman.cloudserver.utils.mail.mails.EmailServiceImpl;
+import com.yelman.cloudserver.utils.mail.EmailNotificationService;
 import org.springframework.stereotype.Service;
 
 @Service
 public class AlertServices implements AlertsImpl {
 
-    private final EmailServiceImpl emailService;
+    private final EmailNotificationService emailService;
 
-    public AlertServices(EmailServiceImpl emailService) {
+    public AlertServices(EmailNotificationService emailService) {
         this.emailService = emailService;
     }
 
     @Override
     public boolean emailManager(Vet vet, SensorDto dto, boolean dailyOrHourly, String riskSituation) {
-        AlertDto c = toEntity(dto);
-        Double a;
-        a = dailyActiveEmail(c);
-        EmailSendDto emailSendDto = new EmailSendDto();
-        emailSendDto.setRecipient(vet.getUser().getEmail());
-        emailSendDto.setSubject(" %" + riskSituation + "ihtimalle ilgili hayvan riskte !!");
-        emailSendDto.setMsgBody("Hayvan id'si :" + dto.getAnimalId().toString() + "\n" +
-                "Kalp Atış hızı : " + dto.getHeartBeat() + "\n" +
-                "Vücut Sıcaklıgı : " + dto.getTemperature() + "\n"
-        );
-
-
-        if (a > 80) {
-            emailService.sendSimpleMail(emailSendDto);
+        try {
+            AlertDto c = toEntity(dto);
+            Double a;
+            a = dailyActiveEmail(c);
+            if (a > 80) {
+                emailService.sendEmail(vet, dto, false, riskSituation);
+            }
+            if (a > 55) {
+                emailService.sendEmail(vet, dto, false, riskSituation);
+            }
+            return true;
+        } catch (Exception e) {
+            return false;
         }
-        if (a > 65) {
-            emailService.sendSimpleMail(emailSendDto);
-        }
-        return true;
     }
 
 

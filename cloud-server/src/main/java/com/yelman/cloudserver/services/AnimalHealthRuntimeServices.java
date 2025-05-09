@@ -2,14 +2,13 @@ package com.yelman.cloudserver.services;
 
 import com.itextpdf.text.DocumentException;
 import com.yelman.cloudserver.api.dto.AnimalHealthDto;
-import com.yelman.cloudserver.api.dto.EmailSendDto;
 import com.yelman.cloudserver.api.dto.PdfSensorDto;
 import com.yelman.cloudserver.api.dto.SensorDto;
 import com.yelman.cloudserver.model.*;
 import com.yelman.cloudserver.repository.*;
 import com.yelman.cloudserver.services.core.FuzzyLogicService;
 import com.yelman.cloudserver.services.impl.AnimalHealthRuntimeImpl;
-import com.yelman.cloudserver.utils.mail.mails.EmailServiceImpl;
+import com.yelman.cloudserver.utils.mail.EmailNotificationService;
 import com.yelman.cloudserver.utils.pdf.PdfGenerator;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -32,7 +31,7 @@ public class AnimalHealthRuntimeServices implements AnimalHealthRuntimeImpl {
     private final FuzzyLogicService fuzzyLogicService;
     private final PdfGenerator pdfGenerator;
     private final CompanyRepository companyRepository;
-    private final EmailServiceImpl emailServiceImpl;
+    private final EmailNotificationService emailService;
 
 
     public AnimalHealthRuntimeServices(ChewingActivityRepository chewingActivityRepository,
@@ -42,7 +41,7 @@ public class AnimalHealthRuntimeServices implements AnimalHealthRuntimeImpl {
                                        FuzzyLogicService fuzzyLogicService,
                                        PdfGenerator pdfGenerator,
                                        CompanyRepository companyRepository,
-                                       EmailServiceImpl emailServiceImpl) {
+                                       EmailNotificationService emailService) {
         this.chewingActivityRepository = chewingActivityRepository;
         this.heartBeatRepository = heartBeatRepository;
         this.animalRepository = animalRepository;
@@ -50,7 +49,8 @@ public class AnimalHealthRuntimeServices implements AnimalHealthRuntimeImpl {
         this.fuzzyLogicService = fuzzyLogicService;
         this.pdfGenerator = pdfGenerator;
         this.companyRepository = companyRepository;
-        this.emailServiceImpl = emailServiceImpl;
+        this.emailService = emailService;
+
     }
 
     @Override
@@ -78,15 +78,16 @@ public class AnimalHealthRuntimeServices implements AnimalHealthRuntimeImpl {
         boolean a = addChewingActivity(animal.getAnimalId(), animal.getChewingActivity());
         boolean b = addHeartBeat(animal.getAnimalId(), animal.getHeartBeat());
         boolean c = addTemperatureHumidity(animal.getAnimalId(), animal.getTemperature(), animal.getHumidity());
-        if (a || b || c) {
+        if (a && b && c) {
             fuzzyLogicService.fuzzyLogicRealtime(animal);
             return true;
         }
         return false;
     }
 
-    public void dailyFuzzyLogic() {
-        List<Long> animalId = animalRepository.findAllAnimalId();
+    public void dailyFuzzyLogic(Long companyId) throws IOException {
+        Company company = companyRepository.findById(companyId).orElseThrow();
+        List<Long> animalId = animalRepository.findAllAnimalIdByCompany_Id(companyId);
         for (Long animalId1 : animalId) {
             fuzzyLogicService.dailyFuzzyLogic(animalId1);
         }
@@ -94,22 +95,21 @@ public class AnimalHealthRuntimeServices implements AnimalHealthRuntimeImpl {
 
     @Override
     @Transactional
-    public void weeklyPdfMailLogic(Long companyId) throws DocumentException, IOException {
-        Optional<Company> company = companyRepository.findById(companyId);
+    public void weeklyAndDailyPdfMailLogic(Long companyId, boolean weekIsDay) throws DocumentException, IOException {
+        Company company = companyRepository.findById(companyId).orElseThrow();
         List<Long> animalId = animalRepository.findAllAnimalIdByCompany_Id(companyId);
         List<PdfSensorDto> dto = new ArrayList<>();
-        for (Long animalId1 : animalId) {
-            dto.add(fuzzyLogicService.weeklyPdfMailLogic(animalId1));
+        if (weekIsDay) {
+            for (Long animalId1 : animalId) {
+                dto.add(fuzzyLogicService.weeklyPdfMailLogic(animalId1));
+            }
+        } else {
+            for (Long animalId1 : animalId) {
+                dto.add(fuzzyLogicService.dailyPdfMailLogic(animalId1));
+            }
         }
-
         byte[] pdf = pdfGenerator.export(dto);
-        EmailSendDto dtos = new EmailSendDto();
-                dtos.setAttachmentName("Pdf Görüntüleme");
-                dtos.setRecipient(company.get().getUser().getEmail());
-                dtos.setSubject(company.get().getName()+" Haftalık çiftlik raporu");
-                dtos.setMsgBody("Haftalık Hayvan verileri ektedir ");
-                dtos.setAttachmentData(pdf);
-        emailServiceImpl.sendMailWithAttachment(dtos);
+        emailService.sendEmailAtc(pdf, company.getUser().getEmail());
     }
 
     @Transactional
@@ -119,7 +119,6 @@ public class AnimalHealthRuntimeServices implements AnimalHealthRuntimeImpl {
         deleteHeartBeat(animalId);
         deleteTemperatureAndHumidity(animalId);
     }
-
 
     private void deleteChewingActivity(Long animalId) {
         getByAnimal(animalId).ifPresent(chewingActivity -> {

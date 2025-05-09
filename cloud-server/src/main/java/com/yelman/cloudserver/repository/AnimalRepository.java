@@ -13,7 +13,7 @@ import java.util.List;
 
 public interface AnimalRepository extends JpaRepository<Animal, Long> {
     List<Animal> findByCompany_Id(Long company_id);
-    //?
+
     @Query("SELECT a.id FROM Animal a")
     List<Long> findAllAnimalId();
 
