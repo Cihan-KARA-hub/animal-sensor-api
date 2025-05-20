@@ -13,4 +13,6 @@ public interface CompanyRepository extends JpaRepository<Company, Long> {
 
     @Query("SELECT a.id FROM Company a ")
     List<Long> findAllCompanyId();
+    Company findByName(String username);
+    Company findByUser_Id(Long id);
 }

@@ -9,7 +9,7 @@ import java.io.IOException;
 
 public interface AnimalHealthRuntimeImpl {
 
-    AnimalHealthDto getAnimals(Long animalId, Pageable pageable);
+    AnimalHealthDto getAnimals(String animalTagId, Pageable pageable);
 
     boolean addAnimalHealthHourlyRuntime(SensorDto animal) throws IOException;
 

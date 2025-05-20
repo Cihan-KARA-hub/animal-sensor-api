@@ -14,7 +14,7 @@ import java.util.List;
 @Repository
 
 public interface HeartBeatRepository extends JpaRepository<HeartBeat, Long> {
-    Page<HeartBeat> findByAnimal_Id(Long animalId,
+    Page<HeartBeat> findByAnimal_TagId(String animalId,
                                     Pageable pageable);
 
     @Query(value = "SELECT AVG(heart_beat_rate) FROM heart_beat " +

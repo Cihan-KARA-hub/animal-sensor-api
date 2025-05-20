@@ -1,12 +1,13 @@
 package com.yelman.cloudserver.services.impl;
 
+import com.yelman.cloudserver.api.dto.UsersCreateDto;
 import com.yelman.cloudserver.model.Users;
 
 import java.util.List;
 
 public interface UserServicesImpl {
 
-    boolean registerUser(Users user);
+    boolean registerUser(UsersCreateDto user);
 
     Users getUserByUsername(String username);
 
@@ -19,7 +20,7 @@ public interface UserServicesImpl {
     void deleteUser(Long id );
     List<Users> getAllUser();
 
-    boolean loginUserBoolean(String username, String password);
+    Long loginUserAndGetCompanyId(String username, String password);
 
 
 }

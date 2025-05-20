@@ -54,11 +54,11 @@ public class AnimalHealthRuntimeServices implements AnimalHealthRuntimeImpl {
     }
 
     @Override
-    public AnimalHealthDto getAnimals(Long animalId, Pageable pageable) {
+    public AnimalHealthDto getAnimals(String animalTagId, Pageable pageable) {
 
-        Page<HeartBeat> h = heartBeatRepository.findByAnimal_Id(animalId, pageable);
-        Page<TemperatureHumidity> a = temperatureHumidityRepositoryRepository.findByAnimal_Id(animalId, pageable);
-        Page<ChewingActivity> c = chewingActivityRepository.findByAnimal_Id(animalId, pageable);
+        Page<HeartBeat> h = heartBeatRepository.findByAnimal_TagId(animalTagId, pageable);
+        Page<TemperatureHumidity> a = temperatureHumidityRepositoryRepository.findByAnimal_TagId(animalTagId, pageable);
+        Page<ChewingActivity> c = chewingActivityRepository.findByAnimal_TagId(animalTagId, pageable);
 
         AnimalHealthDto animalHealthDto = new AnimalHealthDto();
         animalHealthDto.setHeartBeats(h.getContent());

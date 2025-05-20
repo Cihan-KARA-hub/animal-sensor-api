@@ -42,7 +42,6 @@ public class AnimalServices implements AnimalImpl {
         return dto;
     }
 
-    @Transactional
     @Override
     public boolean deleteAnimal(Long id) {
         Animal animal = animalRepository.findById(id).orElse(null);
@@ -51,12 +50,30 @@ public class AnimalServices implements AnimalImpl {
         }
         animalHealthRuntimeServices.deleteAllSensorAnimalId(id);
         medicalHistoryServices.deleteMedicalHistory(id);
-        animalRepository.delete(animal);
+        animalRepository.deleteById(animal.getId());
+        return true;
+    }
+
+    @Override
+    @Transactional
+    public boolean update(Long id, AnimalDto animal) {
+        Animal oldAnimal = animalRepository.findById(id).orElse(null);
+        if (oldAnimal == null) {
+            return false;
+        }
+        oldAnimal.setTagId(animal.getTagId());
+        oldAnimal.setSpecies(animal.getSpecies());
+        oldAnimal.setBirthDate(animal.getBirthDate());
+        Animal newAnimal = animalRepository.save(oldAnimal);
+        if (newAnimal == null) {
+            return false;
+        }
         return true;
     }
 
     private Animal maptoAnimal(AnimalDto animalDto) {
         Animal newAnimal = new Animal();
+        newAnimal.setId(animalDto.getId());
         newAnimal.setBirthDate(animalDto.getBirthDate());
         newAnimal.setSpecies(animalDto.getSpecies());
         newAnimal.setTagId(animalDto.getTagId());
@@ -69,6 +86,7 @@ public class AnimalServices implements AnimalImpl {
         List<AnimalDto> dtos = new ArrayList<>();
         for (Animal animal : entity) {
             AnimalDto dto = new AnimalDto();
+            dto.setId(animal.getId());
             dto.setBirthDate(animal.getBirthDate());
             dto.setTagId(animal.getTagId());
             dto.setSpecies(animal.getSpecies());

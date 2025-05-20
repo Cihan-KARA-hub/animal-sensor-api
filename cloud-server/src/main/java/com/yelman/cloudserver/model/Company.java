@@ -26,12 +26,11 @@ public class Company {
     @Column(name = "updated_at", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private OffsetDateTime updatedAt;
 
-    public Company(Long id, String name, Users user, OffsetDateTime createdAt, OffsetDateTime updatedAt) {
-        this.id = id;
+    public Company(String name, Users user) {
+
         this.name = name;
         this.user = user;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
+
     }
 
     public Company() {

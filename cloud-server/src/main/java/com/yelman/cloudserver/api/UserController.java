@@ -1,14 +1,15 @@
 package com.yelman.cloudserver.api;
 
 import com.yelman.cloudserver.api.dto.LoginRequestDto;
+import com.yelman.cloudserver.api.dto.UsersCreateDto;
 import com.yelman.cloudserver.model.Users;
-import com.yelman.cloudserver.services.UserServices;
 import com.yelman.cloudserver.services.impl.UserServicesImpl;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
+@CrossOrigin(origins = "http://localhost:50140")
 @RestController
 @RequestMapping("api/v1/user")
 public class UserController {
@@ -20,7 +21,7 @@ public class UserController {
 
 
     @PostMapping("")
-    public HttpStatus addUser(@RequestBody Users user) {
+    public HttpStatus addUser(@RequestBody UsersCreateDto user) {
         boolean empty = userServices.registerUser(user);
         if (empty) {
             return HttpStatus.CREATED;
@@ -35,11 +36,11 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public HttpStatus login(@RequestBody LoginRequestDto dto) {
-        boolean login = userServices.loginUserBoolean(dto.getUsername(), dto.getPassword());
-        if (login) {
-            return HttpStatus.OK;
+    public ResponseEntity<Long> login(@RequestBody LoginRequestDto dto) {
+        Long companyId = userServices.loginUserAndGetCompanyId(dto.getUsername(), dto.getPassword());
+        if (companyId != null) {
+            return ResponseEntity.ok(companyId);
         }
-        return HttpStatus.UNAUTHORIZED;
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 }

@@ -1,7 +1,6 @@
 package com.yelman.cloudserver.model;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -33,14 +32,13 @@ public class Vet {
     @Column(name = "updated_at", nullable = false)
     private OffsetDateTime updatedAt;
 
-    public Vet(Long id, String name, Users user, Company responsibleCompany, String title, OffsetDateTime createdAt, OffsetDateTime updatedAt) {
-        this.id = id;
+    public Vet(String name, Users user, Company responsibleCompany, String title) {
+
         this.name = name;
         this.user = user;
         this.responsibleCompany = responsibleCompany;
         this.title = title;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
+
     }
 
     public Vet() {

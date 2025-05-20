@@ -8,6 +8,6 @@ import java.util.List;
 
 @Repository
 public interface MedicalHistoryRepository extends JpaRepository<MedicalHistory, Long> {
-List<MedicalHistory> findByAnimalId(Long animalId);
-boolean deleteByAnimalId(Long animalId);
+List<MedicalHistory> findByAnimal_TagId(String animal_tagId);
+void deleteByAnimalId(Long animalId);
 }

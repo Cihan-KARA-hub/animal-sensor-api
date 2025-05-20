@@ -13,7 +13,7 @@ import java.util.List;
 
 @Repository
 public interface TemperatureHumidityRepository extends JpaRepository<TemperatureHumidity, Long> {
-    Page<TemperatureHumidity> findByAnimal_Id(Long animalId,
+    Page<TemperatureHumidity> findByAnimal_TagId(String animalId,
                                               Pageable pageable);
 
     @Query("SELECT AVG(c.temperature) FROM TemperatureHumidity c" +

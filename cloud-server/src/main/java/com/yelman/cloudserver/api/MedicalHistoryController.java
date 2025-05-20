@@ -1,14 +1,13 @@
 package com.yelman.cloudserver.api;
 
 import com.yelman.cloudserver.api.dto.MedicalHistoryDto;
-import com.yelman.cloudserver.services.MedicalHistoryServices;
 import com.yelman.cloudserver.services.impl.MedicalHistoryImp;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@CrossOrigin(origins = "http://localhost:56038")
+@CrossOrigin(origins = "http://localhost:50140")
 @RestController
 @RequestMapping("api/v1/medical-history")
 public class MedicalHistoryController {
@@ -19,12 +18,18 @@ public class MedicalHistoryController {
         this.medicalHistoryServices = medicalHistoryServices;
     }
 
-    @GetMapping("/{id}")
-    public List<MedicalHistoryDto> getMedicalHistory(@PathVariable Long id) {
-        List<MedicalHistoryDto> dto = medicalHistoryServices.getMedicalHistory(id);
+    @GetMapping("/{idTag}")
+    public List<MedicalHistoryDto> getMedicalHistory(@PathVariable String idTag) {
+        List<MedicalHistoryDto> dto = medicalHistoryServices.getMedicalHistory(idTag);
         if (dto.isEmpty()) {
             return null;
         }
         return dto;
+    }
+
+    @DeleteMapping("{id}")
+    public HttpStatusCode deleteMedicalHistory(@PathVariable Long id) {
+        medicalHistoryServices.deleteMedicalHistory(id);
+        return HttpStatusCode.valueOf(200);
     }
 }

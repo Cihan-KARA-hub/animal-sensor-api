@@ -8,4 +8,5 @@ public interface CompanyImpl {
 
     Boolean addCompany(CompanyDto company);
     List<Long> getAllCompanyId();
+    void deleteCompany(Long id);
 }

@@ -4,8 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.util.Date;
 
-public class MedicalHistoryDto {
-    private Long id;
+public class CreateMedicalHistoryDto {
     private String treatment;
     private String veterinarian;
     private Long animalId;
@@ -15,17 +14,24 @@ public class MedicalHistoryDto {
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date recoveryDate;
 
-
-    public MedicalHistoryDto() {
+    public CreateMedicalHistoryDto() {
 
     }
 
-    public Long getId() {
-        return id;
+    public String getVeterinarian() {
+        return veterinarian;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setVeterinarian(String veterinarian) {
+        this.veterinarian = veterinarian;
+    }
+
+    public String getTreatment() {
+        return treatment;
+    }
+
+    public void setTreatment(String treatment) {
+        this.treatment = treatment;
     }
 
     public Long getAnimalId() {
@@ -58,21 +64,5 @@ public class MedicalHistoryDto {
 
     public void setRecoveryDate(Date recoveryDate) {
         this.recoveryDate = recoveryDate;
-    }
-
-    public String getTreatment() {
-        return treatment;
-    }
-
-    public void setTreatment(String treatment) {
-        this.treatment = treatment;
-    }
-
-    public String getVeterinarian() {
-        return veterinarian;
-    }
-
-    public void setVeterinarian(String veterinarian) {
-        this.veterinarian = veterinarian;
     }
 }

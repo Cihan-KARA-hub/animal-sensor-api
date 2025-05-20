@@ -13,7 +13,7 @@ import java.util.List;
 
 @Repository
 public interface ChewingActivityRepository extends JpaRepository<ChewingActivity, Long> {
-    Page<ChewingActivity> findByAnimal_Id(Long animalId,
+    Page<ChewingActivity> findByAnimal_TagId(String animalId,
                                           Pageable pageable);
 
     @Query("SELECT AVG(c.chewCount) FROM ChewingActivity c " +

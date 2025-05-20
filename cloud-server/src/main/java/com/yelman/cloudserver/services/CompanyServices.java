@@ -33,6 +33,11 @@ public class CompanyServices implements CompanyImpl {
         return companyRepository.findAllCompanyId();
     }
 
+    @Override
+    public void deleteCompany(Long id) {
+        companyRepository.deleteById(id);
+    }
+
     private Company mapToCompany(CompanyDto companyDto) {
         Company c = new Company();
         c.setName(companyDto.getName());

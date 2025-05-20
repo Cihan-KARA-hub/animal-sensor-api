@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 
-@CrossOrigin(origins = "http://localhost:56038")
+@CrossOrigin(origins = "http://localhost:50140")
 @RestController
 @RequestMapping("api/v1/animal-health")
 public class AnimalHealthRuntimeController {
@@ -21,12 +21,12 @@ public class AnimalHealthRuntimeController {
         this.animalHealthRuntimeServices = animalHealthRuntimeServices;
 
     }
-    @GetMapping
-    public ResponseEntity<AnimalHealthDto> getAnimalHealthDto(@RequestParam Long animalId,
+    @GetMapping("get-sensor/{idTag}")
+    public ResponseEntity<AnimalHealthDto> getAnimalHealthDto(@PathVariable String idTag,
                                                               @RequestParam(defaultValue = "0") int page,
                                                               @RequestParam(defaultValue = "3") int size) {
         Pageable pageable = PageRequest.of(page, size);
-        AnimalHealthDto dto = animalHealthRuntimeServices.getAnimals(animalId, pageable);
+        AnimalHealthDto dto = animalHealthRuntimeServices.getAnimals(idTag, pageable);
         if (dto == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
