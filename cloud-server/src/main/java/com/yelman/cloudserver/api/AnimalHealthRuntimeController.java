@@ -2,7 +2,6 @@ package com.yelman.cloudserver.api;
 
 import com.yelman.cloudserver.api.dto.AnimalHealthDto;
 import com.yelman.cloudserver.api.dto.SensorDto;
-import com.yelman.cloudserver.services.AnimalHealthRuntimeServices;
 import com.yelman.cloudserver.services.impl.AnimalHealthRuntimeImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -17,6 +16,8 @@ import java.io.IOException;
 @RequestMapping("api/v1/animal-health")
 public class AnimalHealthRuntimeController {
     private final AnimalHealthRuntimeImpl animalHealthRuntimeServices;
+
+
     public AnimalHealthRuntimeController(AnimalHealthRuntimeImpl animalHealthRuntimeServices) {
         this.animalHealthRuntimeServices = animalHealthRuntimeServices;
 
@@ -41,5 +42,6 @@ public class AnimalHealthRuntimeController {
         }
         return HttpStatus.BAD_REQUEST;
     }
+
 
 }

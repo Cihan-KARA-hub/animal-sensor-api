@@ -19,6 +19,10 @@ public class SensorDto {
 
     }
 
+    public SensorDto(byte[] payload) {
+
+    }
+
     public Double getTemperature() {
         return temperature;
     }

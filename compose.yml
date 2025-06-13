@@ -16,9 +16,24 @@ services:
     networks:
       - postgres_network
 
+  mqtt:
+    image: eclipse-mosquitto
+    volumes:
+        - mosquitto_conf:/mosquitto/config
+        - mosquitto_data:/mosquitto/data
+        - mosquitto_log:/mosquitto/log
+    networks:
+        - mqtt
+    ports:
+      - "9001:9001"
+      - "1883:1883"
 volumes:
   postgres_data:
-
+  mosquitto_conf:
+  mosquitto_data:
+  mosquitto_log:
 networks:
   postgres_network:
+    driver: bridge
+  mqtt:
     driver: bridge
